@@ -1,0 +1,37 @@
+# dependencies
+node_modules/
+
+# build
+dist/
+dist-ssr/
+
+# env
+.env
+.env.local
+.env.*.local
+
+# logs
+*.log
+npm-debug.log*
+
+# editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# test coverage
+coverage/
+
+# misc
+.DS_Store
+
+# AI / Claude
+.claude/
+CLAUDE.md
+PROJECT_PLAN.md
+MCP_GUIDE.md
+design_example/
