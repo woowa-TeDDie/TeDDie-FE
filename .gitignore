@@ -31,7 +31,9 @@ coverage/
 
 # AI / Claude
 .claude/
-CLAUDE.md
-PROJECT_PLAN.md
-MCP_GUIDE.md
 design_example/
+TeDDie-FE.zip
+
+# Markdown (README.md 제외)
+*.md
+!README.md
