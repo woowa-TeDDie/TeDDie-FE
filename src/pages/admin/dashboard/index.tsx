@@ -1,4 +1,4 @@
-import { AdminLayout } from '@/widgets/admin-layout/AdminLayout'
+import { AdminLayout } from '@/widgets/admin-sidebar/AdminLayout'
 import { Card } from '@/shared/ui/Card'
 
 const STATS = [
@@ -14,8 +14,8 @@ export function AdminDashboardPage() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {STATS.map(({ label, value }) => (
           <Card key={label} className="flex flex-col gap-2 p-6">
-            <span className="text-sm text-text-secondary">{label}</span>
-            <span className="text-3xl font-bold text-primary">{value}</span>
+            <span className="text-sm text-text-muted">{label}</span>
+            <span className="text-3xl font-bold text-text-primary">{value}</span>
           </Card>
         ))}
       </div>

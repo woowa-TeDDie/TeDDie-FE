@@ -21,6 +21,7 @@ function getHeaders(): HeadersInit {
 async function handleResponse<T>(response: Response): Promise<T> {
   if (response.status === 401) {
     localStorage.removeItem('accessToken')
+    window.location.replace('/login')
     throw new HttpError(401, 'Unauthorized')
   }
 
@@ -62,6 +63,15 @@ async function patch<T>(path: string, body?: unknown): Promise<T> {
   return handleResponse<T>(response)
 }
 
+async function put<T>(path: string, body?: unknown): Promise<T> {
+  const response = await fetch(`${BASE_URL}${path}`, {
+    method: 'PUT',
+    headers: getHeaders(),
+    body: JSON.stringify(body),
+  })
+  return handleResponse<T>(response)
+}
+
 async function del<T>(path: string): Promise<T> {
   const response = await fetch(`${BASE_URL}${path}`, {
     method: 'DELETE',
@@ -70,4 +80,4 @@ async function del<T>(path: string): Promise<T> {
   return handleResponse<T>(response)
 }
 
-export const baseClient = { get, post, patch, delete: del }
+export const baseClient = { get, post, put, patch, delete: del }

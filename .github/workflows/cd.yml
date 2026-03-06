@@ -1,17 +1,13 @@
-name: CI
+name: CD
 
 on:
   push:
     branches:
-      - develop
-  pull_request:
-    branches:
-      - develop
       - main
 
 jobs:
-  ci:
-    name: 테스트 · 타입 체크 · 빌드
+  deploy:
+    name: Vercel 프로덕션 배포
     runs-on: ubuntu-latest
 
     steps:
@@ -34,4 +30,10 @@ jobs:
         run: npm run typecheck
 
       - name: 빌드 검증
-        run: npx vite build
+        run: npm run build
+
+      - name: Vercel 프로덕션 배포
+        run: npx vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}

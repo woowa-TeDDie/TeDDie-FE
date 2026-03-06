@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterAll, afterEach } from 'vitest'
+import { describe, it, expect, beforeAll, afterAll, afterEach, vi } from 'vitest'
 import { setupServer } from 'msw/node'
 import { http, HttpResponse } from 'msw'
 import { authClient } from '../authClient'
@@ -27,6 +27,10 @@ const server = setupServer(
     }
     return HttpResponse.json({ message: '인증이 필요합니다' }, { status: 401 })
   }),
+
+  http.post('http://localhost:8080/auth/logout', () =>
+    new HttpResponse(null, { status: 204 }),
+  ),
 )
 
 beforeAll(() => server.listen())
@@ -76,6 +80,23 @@ describe('authClient', () => {
     it('토큰 없이 요청 시 에러를 던진다', async () => {
       localStorage.removeItem('accessToken')
       await expect(authClient.getMe()).rejects.toThrow()
+    })
+  })
+
+  describe('logout', () => {
+    it('로그아웃 시 accessToken이 제거되고 /login으로 이동한다', async () => {
+      localStorage.setItem('accessToken', 'mock-token-abc')
+      const replaceSpy = vi.fn()
+      vi.spyOn(window, 'location', 'get').mockReturnValue({
+        ...window.location,
+        replace: replaceSpy,
+      })
+
+      await authClient.logout()
+
+      expect(localStorage.getItem('accessToken')).toBeNull()
+      expect(replaceSpy).toHaveBeenCalledWith('/login')
+      vi.restoreAllMocks()
     })
   })
 })

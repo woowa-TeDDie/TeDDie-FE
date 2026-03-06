@@ -1,22 +1,7 @@
 import { baseClient } from './baseClient'
+import type { Difficulty } from './generateClient'
 
-export type GenerateStatus = 'IN_PROGRESS' | 'COMPLETED' | 'FAILED'
-export type Difficulty = 'EASY' | 'MEDIUM' | 'HARD'
-
-export interface GenerateRequest {
-  difficulty: Difficulty
-  category: string
-  language: string
-}
-
-export interface GenerateResponse {
-  jobId: string
-}
-
-export interface GenerateStatusResponse {
-  status: GenerateStatus
-  missionId: number | null
-}
+export type { Difficulty } from './generateClient'
 
 export interface Mission {
   id: number
@@ -42,14 +27,6 @@ export interface GetMissionsParams {
   language?: string
 }
 
-async function generate(body: GenerateRequest): Promise<GenerateResponse> {
-  return baseClient.post<GenerateResponse>('/generate', body)
-}
-
-async function getGenerateStatus(jobId: string): Promise<GenerateStatusResponse> {
-  return baseClient.get<GenerateStatusResponse>(`/generate/status/${jobId}`)
-}
-
 async function getMissions(params: GetMissionsParams = {}): Promise<MissionPage> {
   const query = new URLSearchParams()
   if (params.page !== undefined) query.set('page', String(params.page))
@@ -64,4 +41,4 @@ async function getMission(id: number): Promise<Mission> {
   return baseClient.get<Mission>(`/missions/${id}`)
 }
 
-export const missionClient = { generate, getGenerateStatus, getMissions, getMission }
+export const missionClient = { getMissions, getMission }

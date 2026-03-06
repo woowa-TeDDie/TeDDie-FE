@@ -1,5 +1,5 @@
 import { useRef, useCallback } from 'react'
-import { missionClient } from '@/shared/api/missionClient'
+import { generateClient } from '@/shared/api/generateClient'
 import { useGenerateStore } from './store'
 
 interface PollingOptions {
@@ -8,7 +8,8 @@ interface PollingOptions {
 
 export function useGeneratePolling({ intervalMs = 2000 }: PollingOptions = {}) {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const { setCompleted, setFailed } = useGenerateStore.getState()
+  const setCompleted = useGenerateStore((s) => s.setCompleted)
+  const setFailed = useGenerateStore((s) => s.setFailed)
 
   const stopPolling = useCallback(() => {
     if (timerRef.current) {
@@ -19,7 +20,7 @@ export function useGeneratePolling({ intervalMs = 2000 }: PollingOptions = {}) {
 
   const poll = useCallback(async (jobId: string) => {
     try {
-      const { status, missionId } = await missionClient.getGenerateStatus(jobId)
+      const { status, missionId } = await generateClient.getGenerateStatus(jobId)
       if (status === 'COMPLETED' && missionId !== null) {
         stopPolling()
         setCompleted(missionId)

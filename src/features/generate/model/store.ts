@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { GenerateStatus } from '@/shared/api/missionClient'
+import type { GenerateStatus } from '@/shared/api/generateClient'
 
 type StoreStatus = 'IDLE' | GenerateStatus
 

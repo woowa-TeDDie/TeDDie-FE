@@ -1,35 +1,20 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { authClient } from '@/shared/api/authClient'
-import { useAuthStore } from '@/features/auth'
+import { Link } from 'react-router-dom'
+import { useLogin } from '@/features/auth'
 import { Button } from '@/shared/ui/Button'
 import { Input } from '@/shared/ui/Input'
 
 export function LoginPage() {
-  const navigate = useNavigate()
-  const setAuth = useAuthStore((s) => s.setAuth)
+  const { login, isLoading, error } = useLogin()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
 
   const isDisabled = !email || !password
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setError('')
-    setIsLoading(true)
-    try {
-      const { accessToken } = await authClient.login({ email, password })
-      const user = await authClient.getMe()
-      setAuth(user, accessToken)
-      navigate('/missions')
-    } catch {
-      setError('이메일 또는 비밀번호가 올바르지 않습니다')
-    } finally {
-      setIsLoading(false)
-    }
+    await login(email, password)
   }
 
   return (
