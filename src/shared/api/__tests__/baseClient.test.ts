@@ -59,8 +59,13 @@ describe('baseClient', () => {
     expect(capturedHeader).toBeNull()
   })
 
-  it('응답이 401이면 accessToken을 제거한다', async () => {
+  it('응답이 401이면 accessToken을 제거하고 /login으로 리다이렉트한다', async () => {
     localStorage.setItem('accessToken', 'expired-token')
+    const replaceSpy = vi.fn()
+    vi.spyOn(window, 'location', 'get').mockReturnValue({
+      ...window.location,
+      replace: replaceSpy,
+    })
     server.use(
       http.get('http://localhost:8080/expired', () =>
         HttpResponse.json({ message: 'Unauthorized' }, { status: 401 }),
@@ -68,6 +73,7 @@ describe('baseClient', () => {
     )
     await expect(baseClient.get('/expired')).rejects.toThrow()
     expect(localStorage.getItem('accessToken')).toBeNull()
+    expect(replaceSpy).toHaveBeenCalledWith('/login')
   })
 
   it('네트워크 에러 시 표준화된 에러가 던져진다', async () => {
