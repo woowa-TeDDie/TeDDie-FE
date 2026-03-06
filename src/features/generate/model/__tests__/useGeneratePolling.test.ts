@@ -77,6 +77,28 @@ describe('useGeneratePolling', () => {
     }, { timeout: 2000 })
   })
 
+  it('훅 리렌더링 후에도 store 액션이 올바르게 동작한다', async () => {
+    server.use(
+      http.get('http://localhost:8080/generate/status/:jobId', () => {
+        return HttpResponse.json({ status: 'COMPLETED', missionId: 99 })
+      }),
+    )
+
+    const { result, rerender } = renderHook(() => useGeneratePolling())
+
+    // 리렌더링 후에도 동작해야 한다
+    rerender()
+
+    act(() => {
+      result.current.startPolling('job-rerender')
+    })
+
+    await waitFor(() => {
+      expect(useGenerateStore.getState().status).toBe('COMPLETED')
+      expect(useGenerateStore.getState().missionId).toBe(99)
+    })
+  })
+
   it('stopPolling 호출 시 타이머가 정리되어 추가 폴링이 발생하지 않는다', async () => {
     let callCount = 0
     server.use(
