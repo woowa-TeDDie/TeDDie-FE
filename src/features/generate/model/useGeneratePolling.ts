@@ -8,7 +8,8 @@ interface PollingOptions {
 
 export function useGeneratePolling({ intervalMs = 2000 }: PollingOptions = {}) {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const { setCompleted, setFailed } = useGenerateStore.getState()
+  const setCompleted = useGenerateStore((s) => s.setCompleted)
+  const setFailed = useGenerateStore((s) => s.setFailed)
 
   const stopPolling = useCallback(() => {
     if (timerRef.current) {
