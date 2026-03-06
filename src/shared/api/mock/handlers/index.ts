@@ -31,6 +31,10 @@ export const handlers = [
     HttpResponse.json(MOCK_USER),
   ),
 
+  http.post('http://localhost:8080/auth/logout', () =>
+    new HttpResponse(null, { status: 204 }),
+  ),
+
   // ── missions ──────────────────────────────────────────
   http.get('http://localhost:8080/missions', () =>
     HttpResponse.json({
