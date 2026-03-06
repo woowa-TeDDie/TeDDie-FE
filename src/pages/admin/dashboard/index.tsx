@@ -1,4 +1,4 @@
-import { AdminLayout } from '@/widgets/admin-layout/AdminLayout'
+import { AdminLayout } from '@/widgets/admin-sidebar/AdminLayout'
 import { Card } from '@/shared/ui/Card'
 
 const STATS = [
