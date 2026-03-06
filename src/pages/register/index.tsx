@@ -1,36 +1,21 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { authClient } from '@/shared/api/authClient'
-import { useAuthStore } from '@/features/auth'
+import { Link } from 'react-router-dom'
+import { useRegister } from '@/features/auth'
 import { Button } from '@/shared/ui/Button'
 import { Input } from '@/shared/ui/Input'
 
 export function RegisterPage() {
-  const navigate = useNavigate()
-  const setAuth = useAuthStore((s) => s.setAuth)
+  const { register, isLoading, error } = useRegister()
 
   const [email, setEmail] = useState('')
   const [nickname, setNickname] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
 
   const isDisabled = !email || !nickname || !password
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setError('')
-    setIsLoading(true)
-    try {
-      const { accessToken } = await authClient.register({ email, nickname, password })
-      const user = await authClient.getMe()
-      setAuth(user, accessToken)
-      navigate('/missions')
-    } catch {
-      setError('회원가입에 실패했습니다. 이미 사용 중인 이메일일 수 있습니다')
-    } finally {
-      setIsLoading(false)
-    }
+    await register(email, nickname, password)
   }
 
   return (
