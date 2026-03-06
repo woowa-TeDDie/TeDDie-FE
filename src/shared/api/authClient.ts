@@ -24,4 +24,10 @@ async function getMe(): Promise<User> {
   return baseClient.get<User>('/auth/me')
 }
 
-export const authClient = { login, register, getMe }
+async function logout(): Promise<void> {
+  await baseClient.post('/auth/logout').catch(() => {})
+  localStorage.removeItem('accessToken')
+  window.location.replace('/login')
+}
+
+export const authClient = { login, register, getMe, logout }
