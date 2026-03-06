@@ -18,7 +18,7 @@ export function GenerateLoadingPage() {
     if (!jobId) return
     startPolling(jobId)
     return () => stopPolling()
-  }, [jobId])
+  }, [jobId, startPolling, stopPolling])
 
   useEffect(() => {
     if (status === 'COMPLETED' && missionId !== null) {
