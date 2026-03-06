@@ -50,7 +50,7 @@ export function GenerateLoadingPage() {
     <div className="min-h-screen bg-bg-dark flex items-center justify-center px-4">
       <div className="flex flex-col items-center gap-6 text-center">
         <Spinner size="lg" />
-        <p className="text-text-secondary text-lg">미션을 생성하고 있습니다...</p>
+        <p className="text-text-muted text-lg">미션을 생성하고 있습니다...</p>
         <p className="text-text-muted text-sm">잠시만 기다려 주세요</p>
       </div>
     </div>
