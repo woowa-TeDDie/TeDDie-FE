@@ -79,4 +79,29 @@ describe('GenerateLoadingPage', () => {
       expect(screen.getByRole('button', { name: '다시 시도' })).toBeInTheDocument(),
     )
   })
+
+  it('컴포넌트 언마운트 시 폴링이 중단되어 추가 API 호출이 발생하지 않는다', async () => {
+    let callCount = 0
+    server.use(
+      http.get('http://localhost:8080/generate/status/job-abc', () => {
+        callCount++
+        return HttpResponse.json({ status: 'IN_PROGRESS', missionId: null })
+      }),
+    )
+
+    const { unmount } = renderPage()
+
+    // 첫 번째 폴링 완료 대기
+    await waitFor(() => expect(callCount).toBeGreaterThanOrEqual(1))
+
+    // 언마운트
+    unmount()
+    const countAfterUnmount = callCount
+
+    // interval보다 충분히 길게 대기
+    await new Promise<void>((resolve) => setTimeout(resolve, 300))
+
+    // 언마운트 이후 추가 호출 없음
+    expect(callCount).toBe(countAfterUnmount)
+  })
 })
