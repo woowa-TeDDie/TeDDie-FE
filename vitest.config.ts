@@ -22,6 +22,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore – __dirname은 Vite/Vitest 번들러 환경에서 제공됨
       '@': path.resolve(__dirname, './src'),
     },
   },
