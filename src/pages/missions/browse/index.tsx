@@ -34,7 +34,7 @@ export function MissionBrowsePage() {
 
         {isLoading && (
           <div className="flex justify-center py-20">
-            <Spinner role="status" size="lg" />
+            <Spinner size="lg" />
           </div>
         )}
 

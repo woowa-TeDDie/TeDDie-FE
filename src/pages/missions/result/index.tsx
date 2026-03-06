@@ -23,7 +23,7 @@ export function MissionResultPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-bg-dark flex items-center justify-center">
-        <Spinner role="status" size="lg" />
+        <Spinner size="lg" />
       </div>
     )
   }

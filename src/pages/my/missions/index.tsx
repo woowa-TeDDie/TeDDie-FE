@@ -27,7 +27,7 @@ export function MyMissionsPage() {
 
         {isLoading && (
           <div className="flex justify-center py-20">
-            <Spinner role="status" size="lg" />
+            <Spinner size="lg" />
           </div>
         )}
 
