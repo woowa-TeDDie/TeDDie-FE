@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { missionClient, type Difficulty } from '@/shared/api/missionClient'
+import { generateClient, type Difficulty } from '@/shared/api/generateClient'
 import { useGenerateStore } from '@/features/generate'
 import { Button } from '@/shared/ui/Button'
 
@@ -23,7 +23,7 @@ export function GenerateFormPage() {
     setError('')
     setIsLoading(true)
     try {
-      const { jobId } = await missionClient.generate({ difficulty, category, language })
+      const { jobId } = await generateClient.generate({ difficulty, category, language })
       setJobId(jobId)
       navigate(`/generate/${jobId}`)
     } catch {

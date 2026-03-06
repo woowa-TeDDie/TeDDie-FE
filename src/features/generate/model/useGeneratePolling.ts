@@ -1,5 +1,5 @@
 import { useRef, useCallback } from 'react'
-import { missionClient } from '@/shared/api/missionClient'
+import { generateClient } from '@/shared/api/generateClient'
 import { useGenerateStore } from './store'
 
 interface PollingOptions {
@@ -19,7 +19,7 @@ export function useGeneratePolling({ intervalMs = 2000 }: PollingOptions = {}) {
 
   const poll = useCallback(async (jobId: string) => {
     try {
-      const { status, missionId } = await missionClient.getGenerateStatus(jobId)
+      const { status, missionId } = await generateClient.getGenerateStatus(jobId)
       if (status === 'COMPLETED' && missionId !== null) {
         stopPolling()
         setCompleted(missionId)
