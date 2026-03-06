@@ -76,4 +76,36 @@ describe('useGeneratePolling', () => {
       expect(callCount).toBeGreaterThanOrEqual(3)
     }, { timeout: 2000 })
   })
+
+  it('stopPolling 호출 시 타이머가 정리되어 추가 폴링이 발생하지 않는다', async () => {
+    let callCount = 0
+    server.use(
+      http.get('http://localhost:8080/generate/status/:jobId', () => {
+        callCount++
+        return HttpResponse.json({ status: 'IN_PROGRESS', missionId: null })
+      }),
+    )
+
+    const { result } = renderHook(() => useGeneratePolling({ intervalMs: 100 }))
+
+    act(() => {
+      result.current.startPolling('job-stop-test')
+    })
+
+    // 첫 번째 폴링 호출이 완료될 때까지 대기
+    await waitFor(() => expect(callCount).toBeGreaterThanOrEqual(1))
+
+    // 폴링 중단
+    act(() => {
+      result.current.stopPolling()
+    })
+
+    const countAfterStop = callCount
+
+    // interval(100ms)의 4배 이상 대기 → 타이머가 살아있으면 추가 호출이 발생해야 함
+    await new Promise<void>((resolve) => setTimeout(resolve, 400))
+
+    // stopPolling 이후 추가 호출이 없어야 한다
+    expect(callCount).toBe(countAfterStop)
+  })
 })
