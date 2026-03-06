@@ -28,6 +28,17 @@ const server = setupServer(
     return HttpResponse.json({ status: 'IN_PROGRESS', missionId: null }, { status: 200 })
   }),
 
+  http.get('http://localhost:8080/missions', ({ request }) => {
+    const url = new URL(request.url)
+    const page = url.searchParams.get('page') ?? '0'
+    return HttpResponse.json({
+      content: [mockMission],
+      totalPages: 3,
+      totalElements: 25,
+      number: Number(page),
+    }, { status: 200 })
+  }),
+
   http.get('http://localhost:8080/missions/:id', ({ params }) => {
     if (params.id === '1') {
       return HttpResponse.json(mockMission, { status: 200 })
@@ -63,6 +74,21 @@ describe('missionClient', () => {
     it('실패 상태일 때 FAILED를 반환한다', async () => {
       const result = await missionClient.getGenerateStatus('job-failed')
       expect(result.status).toBe('FAILED')
+    })
+  })
+
+  describe('getMissions', () => {
+    it('미션 목록을 페이지 단위로 조회한다', async () => {
+      const result = await missionClient.getMissions({ page: 0 })
+      expect(result.content).toHaveLength(1)
+      expect(result.content[0].title).toBe('자동차 경주 게임')
+      expect(result.totalPages).toBe(3)
+      expect(result.totalElements).toBe(25)
+    })
+
+    it('page 파라미터를 쿼리스트링으로 전달한다', async () => {
+      const result = await missionClient.getMissions({ page: 2 })
+      expect(result.number).toBe(2)
     })
   })
 
