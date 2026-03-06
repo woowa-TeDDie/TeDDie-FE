@@ -18,7 +18,7 @@ export function MyProfilePage() {
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-text-muted text-xs">이메일</span>
-              <span className="text-text-secondary">{user.email}</span>
+              <span className="text-text-muted">{user.email}</span>
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-text-muted text-xs">역할</span>

@@ -43,7 +43,7 @@ export function GenerateFormPage() {
         <h1 className="text-2xl font-bold text-text-primary text-center mb-8">미션 생성</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="difficulty" className="text-sm font-medium text-text-secondary">
+            <label htmlFor="difficulty" className="text-sm font-medium text-text-muted">
               난이도
             </label>
             <select
@@ -61,7 +61,7 @@ export function GenerateFormPage() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="category" className="text-sm font-medium text-text-secondary">
+            <label htmlFor="category" className="text-sm font-medium text-text-muted">
               카테고리
             </label>
             <select
@@ -79,7 +79,7 @@ export function GenerateFormPage() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="language" className="text-sm font-medium text-text-secondary">
+            <label htmlFor="language" className="text-sm font-medium text-text-muted">
               언어
             </label>
             <select
