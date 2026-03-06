@@ -95,4 +95,14 @@ describe('baseClient', () => {
     )
     await expect(baseClient.delete('/test/1')).resolves.not.toThrow()
   })
+
+  it('PUT 요청이 올바르게 수행된다', async () => {
+    server.use(
+      http.put('http://localhost:8080/test/1', () =>
+        HttpResponse.json({ replaced: true }),
+      ),
+    )
+    const data = await baseClient.put<{ replaced: boolean }>('/test/1', { value: 'new' })
+    expect(data.replaced).toBe(true)
+  })
 })
